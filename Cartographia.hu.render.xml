@@ -27,7 +27,7 @@
 	<renderingProperty attr="streetLighting" name="Street lighting" description="Show street lighting" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="osmcCartographiaRed" name="OSMC Cartographia All Hiking Paths Red" description="" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="osmcScopeTransparent" name="OSMC Cartographia Hiking Paths Transparent" description="" type="boolean" possibleValues="" category="details"/>
-	<renderingProperty attr="cartographiaGravelHighlight" name="Cartographia Highlight Gravel Roads " description="" type="boolean" possibleValues="" category="details"/>
+	<renderingProperty attr="cartographiaGravelHighlight" name="Cartographia Highlight Gravel Roads " description="gravel tracks=orange, gravel roads=purple" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="hideUnderground" name="Hide underground objects" description="Hide underground objects" type="boolean" possibleValues="" category="hide"/>
 	<renderingProperty attr="hideAccess" name="Hide access restrictions" description="Hide access type" type="boolean" possibleValues="" category="hide"/>
 	<renderingProperty attr="hideBuildings" name="Hide buildings" description="Hide buildings" type="boolean" possibleValues="" category="hide"/>
@@ -295,6 +295,12 @@
 	</renderingAttribute>
 	<renderingAttribute name="compacted_dot_CartographiaColor">		<!--#-->
 		<case attrColorValue="#C71142a1" />
+	</renderingAttribute>
+	<renderingAttribute name="gravel_track_square_OLD_CartographiaColor">		<!--#-->
+		<case attrColorValue="#ADff7200" />
+	</renderingAttribute>
+	<renderingAttribute name="gravel_road_square_OLD_CartographiaColor">		<!--#-->
+		<case attrColorValue="#C7aeabcd" />
 	</renderingAttribute>
 	<renderingAttribute name="defaultColor">
 		<!-- next line should should make background transparent for underlays to be visible, but this curretnly does not work as desired -->
@@ -5974,15 +5980,15 @@
 											<case maxzoom="20" pathEffect_5="12_12"/>
 											<case minzoom="21" pathEffect_5="13_13"/>
 										</apply>
-										<apply_if additional="surface=gravel" color_5="$gravel_dot_CartographiaColor"/>
-										<apply_if additional="surface=unpaved" color_5="$gravel_dot_CartographiaColor"/>
-										<apply_if additional="surface=pebblestone" color_5="$gravel_dot_CartographiaColor"/>
-										<apply_if additional="surface=fine_gravel" color_5="$fine_gravel_dot_CartographiaColor"/>
-										<apply_if additional="surface=compacted" color_5="$compacted_dot_CartographiaColor"/>
-										<apply_if additional="tracktype=grade2" color_5="$fine_gravel_dot_CartographiaColor"/>
-										<apply_if additional="tracktype=grade3" color_5="$gravel_dot_CartographiaColor"/>
-										<apply_if additional="smoothness=good" color_5="$fine_gravel_dot_CartographiaColor"/>
-										<apply_if additional="smoothness=excellent" color_5="$compacted_dot_CartographiaColor"/>
+										<apply_if additional="surface=gravel" color_5="$gravel_track_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=unpaved" color_5="$gravel_track_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=pebblestone" color_5="$gravel_track_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=fine_gravel" color_5="$gravel_track_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=compacted" color_5="$gravel_track_square_OLD_CartographiaColor"/>
+										<apply_if additional="tracktype=grade2" color_5="$gravel_track_square_OLD_CartographiaColor"/>
+										<apply_if additional="tracktype=grade3" color_5="$gravel_track_square_OLD_CartographiaColor"/>
+										<apply_if additional="smoothness=good" color_5="$gravel_track_square_OLD_CartographiaColor"/>
+										<apply_if additional="smoothness=excellent" color_5="$gravel_track_square_OLD_CartographiaColor"/>
 										<apply minzoom="10" color="cyclingRouteCartographiaColor">
 											<case maxzoom="10" strokeWidth_5="1.5" color="$trackCartograpghiaTrackColor"/>
 											<case maxzoom="11" strokeWidth_5="2" color="$trackCartograpghiaTrackColor"/>
@@ -6094,11 +6100,11 @@
 												<case maxzoom="20" pathEffect_5="12_12"/>
 												<case minzoom="21" pathEffect_5="13_13"/>
 											</apply>
-											<apply_if additional="surface=gravel" color_5="$gravel_dot_CartographiaColor"/>
-											<apply_if additional="surface=unpaved" color_5="$gravel_dot_CartographiaColor"/>
-											<apply_if additional="surface=pebblestone" color_5="$gravel_dot_CartographiaColor"/>
-											<apply_if additional="surface=fine_gravel" color_5="$fine_gravel_dot_CartographiaColor"/>
-											<apply_if additional="surface=compacted" color_5="$compacted_dot_CartographiaColor"/>
+											<apply_if additional="surface=gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply_if additional="surface=unpaved" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply_if additional="surface=pebblestone" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply_if additional="surface=fine_gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply_if additional="surface=compacted" color_5="$gravel_road_square_OLD_CartographiaColor"/>
 											<apply minzoom="10" color="cyclingRouteCartographiaColor">
 												<case maxzoom="10" strokeWidth_5="1"/>
 												<case maxzoom="11" strokeWidth_5="2"/>
