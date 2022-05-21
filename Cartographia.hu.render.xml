@@ -28,6 +28,7 @@
 	<renderingProperty attr="osmcCartographiaRed" name="OSMC Cartographia All Hiking Paths Red" description="" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="osmcScopeTransparent" name="OSMC Cartographia Hiking Paths Transparent" description="" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="cartographiaGravelHighlight" name="Cartographia Highlight Gravel Roads " description="gravel tracks=orange, gravel roads=purple" type="boolean" possibleValues="" category="details"/>
+	<renderingProperty attr="cartographiaDashUnsealed" name="Cartographia Dash/Emphasize Unsealed Roads" description="" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="hideUnderground" name="Hide underground objects" description="Hide underground objects" type="boolean" possibleValues="" category="hide"/>
 	<renderingProperty attr="hideAccess" name="Hide access restrictions" description="Hide access type" type="boolean" possibleValues="" category="hide"/>
 	<renderingProperty attr="hideBuildings" name="Hide buildings" description="Hide buildings" type="boolean" possibleValues="" category="hide"/>
@@ -297,10 +298,13 @@
 		<case attrColorValue="#C71142a1" />
 	</renderingAttribute>
 	<renderingAttribute name="gravel_track_square_OLD_CartographiaColor">		<!--#-->
-		<case attrColorValue="#ADff7200" />
+		<case attrColorValue="#8Fff7200" />
 	</renderingAttribute>
 	<renderingAttribute name="gravel_road_square_OLD_CartographiaColor">		<!--#-->
-		<case attrColorValue="#C7aeabcd" />
+		<case attrColorValue="#70aeabcd" />
+	</renderingAttribute>
+	<renderingAttribute name="cartographiaRoadDashColor">
+		<case attrColorValue="#1d1715" />
 	</renderingAttribute>
 	<renderingAttribute name="defaultColor">
 		<!-- next line should should make background transparent for underlays to be visible, but this curretnly does not work as desired -->
@@ -5380,6 +5384,7 @@
 
 		<switch>
 			<switch minzoom="6">
+				<apply_if cartographiaDashUnsealed="false" color_0="#001d1715"/>
 				<switch maxzoom="13">
 					<switch>
 						<switch>
@@ -5447,13 +5452,66 @@
 				</switch>
 
 				<switch minzoom="9" maxzoom="13">
-					<!-- 					<case tag="highway" value="secondary">
+					<case tag="highway" value="secondary">
 						<apply_if maxzoom="9" strokeWidth="1.1:1.1"/>
 						<apply_if minzoom="10" strokeWidth="1.3:1.3"/>
 						<apply_if minzoom="11" strokeWidth="1.5:1.5"/>
 						<apply_if minzoom="12" strokeWidth="1.7:1.7"/>
 						<apply_if minzoom="13" strokeWidth="1.7:1.7" strokeWidth_3="1.7:1.7"/>
-					</case> -->
+						<switch>
+							<case additional="surface=gravel" />
+							<case additional="surface=fine_gravel" />
+							<case additional="surface=compacted" />
+							<case additional="surface=unpaved" />
+							<case additional="surface=pebblestone" />
+							<apply minzoom="10" color_0="$cartographiaRoadDashColor">
+								<case maxzoom="10" strokeWidth="1" strokeWidth_0="1:0.3" pathEffect_0="4_1"/>
+								<case maxzoom="11" strokeWidth="1.5" strokeWidth_0="2:0.3" pathEffect_0="4_1"/>
+								<case maxzoom="12" strokeWidth="2" strokeWidth_0="3:1.5" pathEffect_0="4_1"/>
+								<case maxzoom="13" strokeWidth="3:1.5" strokeWidth_0="4:1" pathEffect_0="8_2"/>
+								<case maxzoom="14" strokeWidth="4:1.33" strokeWidth_0="5:1" pathEffect_0="12_3"/>
+								<case maxzoom="15" strokeWidth="5.5:1.66" strokeWidth_0="9:1.66" pathEffect_0="15_4"/>
+								<case maxzoom="16" strokeWidth="7:2" strokeWidth_0="11:2" pathEffect_0="17_5"/>
+								<case maxzoom="17" strokeWidth="8.5:2.33" strokeWidth_0="12:2.33" pathEffect_0="20_6"/>
+								<case maxzoom="18" strokeWidth="10:2.66" strokeWidth_0="15:2.66" pathEffect_0="25_7"/>
+								<case maxzoom="19" strokeWidth="11:3" strokeWidth_0="16:3" pathEffect_0="30_8"/>
+								<case maxzoom="20" strokeWidth="12:3.33" strokeWidth_0="18:3.33" pathEffect_0="35_9"/>
+								<case minzoom="21" strokeWidth="14:3.66" strokeWidth_0="20:3.66" pathEffect_0="40_10"/>
+							</apply>
+							<apply_if cartographiaGravelHighlight="true">
+								<apply minzoom="10">
+									<case maxzoom="10" pathEffect_5="1_1"/>
+									<case maxzoom="11" pathEffect_5="1.5_1.5"/>
+									<case maxzoom="12" pathEffect_5="3_3"/>
+									<case maxzoom="13" pathEffect_5="4_4"/>
+									<case maxzoom="14" pathEffect_5="6_6"/>
+									<case maxzoom="15" pathEffect_5="7_7"/>
+									<case maxzoom="16" pathEffect_5="8_8"/>
+									<case maxzoom="17" pathEffect_5="9_9"/>
+									<case maxzoom="18" pathEffect_5="10_10"/>
+									<case maxzoom="19" pathEffect_5="11_11"/>
+									<case maxzoom="20" pathEffect_5="12_12"/>
+									<case minzoom="21" pathEffect_5="13_13"/>
+								</apply>
+								<apply_if additional="surface=gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+								<apply_if additional="surface=unpaved" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+								<apply_if additional="surface=pebblestone" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+								<apply_if additional="surface=fine_gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+								<apply_if additional="surface=compacted" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+								<apply minzoom="10">
+									<case maxzoom="10" strokeWidth_5="1"/>
+									<case maxzoom="11" strokeWidth_5="2"/>
+									<case maxzoom="12" strokeWidth_5="3"/>
+									<case maxzoom="13" strokeWidth_5="4" />
+									<case maxzoom="14" strokeWidth_5="5:5" />
+									<case maxzoom="15" strokeWidth_5="6:6" />
+									<case maxzoom="16" strokeWidth_5="7:7" />
+									<case minzoom="17" strokeWidth_5="10:10" />
+									<case minzoom="18" strokeWidth_5="12:12" />
+								</apply >
+							</apply_if>
+						</switch>
+					</case>
 					<case tag="highway" value="secondary_link">
 						<apply_if minzoom="11" strokeWidth="1:1"/>
 						<apply_if minzoom="12" strokeWidth="1.1:1.1"/>
@@ -5476,12 +5534,13 @@
 			</switch>
 
 			<switch>
+				<apply_if cartographiaDashUnsealed="false" color_0="#001d1715"/>
 				<switch minzoom="14">
 					<switch>
 						<case tag="highway" value="motorway" color="$motorwayRoadColor" color__1="$motorwayRoadColor" color__2="$motorwayRoadShadowColor" color_0="$motorwayRoadShadowColor" shadowColor="$motorwayRoadShadowColor"/>
 						<case tag="highway" value="trunk" color="$trunkRoadColor" color__1="$trunkRoadColor" color__2="$trunkRoadShadowColor" color_0="$trunkRoadShadowColor" shadowColor="$trunkRoadShadowColor"/>
 						<case tag="highway" value="primary" color="$primaryRoadColor" color__1="$primaryRoadColor" color_0="$primaryRoadShadowColor" shadowColor="$primaryRoadShadowColor"/>
-						<!-- <case tag="highway" value="secondary" color="$secondaryRoadColor" color__1="$secondaryRoadColor" color_0="$secondaryRoadShadowColor" shadowColor="$secondaryRoadShadowColor"/> -->
+						<case tag="highway" value="secondary" color="$secondaryRoadColor" color__1="$secondaryRoadColor" color_0="$secondaryRoadShadowColor" shadowColor="$secondaryRoadShadowColor"/>
 						<apply cap="ROUND" shadowRadius="$highwayShadowRadius">
 							<case maxzoom="14" strokeWidth="4:4" strokeWidth_3="4:4"/>
 							<case maxzoom="15" strokeWidth="5.5:5.5" strokeWidth_3="5.5:5.5"/>
@@ -5501,6 +5560,59 @@
 										<case maxzoom="18" strokeWidth_0="12:12"/>
 										<case minzoom="19" strokeWidth_0="13:13"/>
 									</apply>
+								</switch>
+								<switch>
+									<case additional="surface=gravel" />
+									<case additional="surface=fine_gravel" />
+									<case additional="surface=compacted" />
+									<case additional="surface=unpaved" />
+									<case additional="surface=pebblestone" />
+									<apply minzoom="10" color_0="$cartographiaRoadDashColor">
+										<case maxzoom="10" strokeWidth="1" strokeWidth_0="2:0.3" pathEffect_0="4_1"/>
+										<case maxzoom="11" strokeWidth="1.5" strokeWidth_0="3:0.3" pathEffect_0="4_1"/>
+										<case maxzoom="12" strokeWidth="2" strokeWidth_0="4:1.5" pathEffect_0="4_1"/>
+										<case maxzoom="13" strokeWidth="3:1.5" strokeWidth_0="5:1" pathEffect_0="8_2"/>
+										<case maxzoom="14" strokeWidth="4:1.33" strokeWidth_0="7:1" pathEffect_0="12_3"/>
+										<case maxzoom="15" strokeWidth="5.5:1.66" strokeWidth_0="9:1.66" pathEffect_0="15_4"/>
+										<case maxzoom="16" strokeWidth="7:2" strokeWidth_0="11:2" pathEffect_0="17_5"/>
+										<case maxzoom="17" strokeWidth="8.5:2.33" strokeWidth_0="12:2.33" pathEffect_0="20_6"/>
+										<case maxzoom="18" strokeWidth="10:2.66" strokeWidth_0="15:2.66" pathEffect_0="25_7"/>
+										<case maxzoom="19" strokeWidth="11:3" strokeWidth_0="16:3" pathEffect_0="30_8"/>
+										<case maxzoom="20" strokeWidth="12:3.33" strokeWidth_0="18:3.33" pathEffect_0="35_9"/>
+										<case minzoom="21" strokeWidth="14:3.66" strokeWidth_0="20:3.66" pathEffect_0="40_10"/>
+									</apply>
+									<apply_if cartographiaGravelHighlight="true">
+										<apply minzoom="10">
+											<case maxzoom="10" pathEffect_5="1_1"/>
+											<case maxzoom="11" pathEffect_5="1.5_1.5"/>
+											<case maxzoom="12" pathEffect_5="3_3"/>
+											<case maxzoom="13" pathEffect_5="4_4"/>
+											<case maxzoom="14" pathEffect_5="6_6"/>
+											<case maxzoom="15" pathEffect_5="7_7"/>
+											<case maxzoom="16" pathEffect_5="8_8"/>
+											<case maxzoom="17" pathEffect_5="9_9"/>
+											<case maxzoom="18" pathEffect_5="10_10"/>
+											<case maxzoom="19" pathEffect_5="11_11"/>
+											<case maxzoom="20" pathEffect_5="12_12"/>
+											<case minzoom="21" pathEffect_5="13_13"/>
+										</apply>
+										<apply_if additional="surface=gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=unpaved" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=pebblestone" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=fine_gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=compacted" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply minzoom="10">
+											<case maxzoom="10" strokeWidth_5="1"/>
+											<case maxzoom="11" strokeWidth_5="2"/>
+											<case maxzoom="12" strokeWidth_5="3"/>
+											<case maxzoom="13" strokeWidth_5="4" />
+											<case maxzoom="14" strokeWidth_5="5:5" />
+											<case maxzoom="15" strokeWidth_5="6:6" />
+											<case maxzoom="16" strokeWidth_5="7:7" />
+											<case minzoom="17" strokeWidth_5="10:10" />
+											<case minzoom="18" strokeWidth_5="12:12" />
+										</apply >
+									</apply_if>
 								</switch>
 							</apply>
 
@@ -5592,7 +5704,7 @@
 
 				<switch>
 					<switch minzoom="11">
-						<!-- <case tag="highway" value="tertiary"/> -->
+						<case tag="highway" value="tertiary"/>
 						<case tag="highway" value="tertiary_link"/>
 						<apply shadowColor="$tertiaryRoadShadowColor"/>
 						<apply_if maxzoom="11" shadowRadius="1"/>
@@ -5602,14 +5714,67 @@
 						<apply_if minzoom="12" nightMode="true" shadowRadius="$highwayShadowRadiusNight"/>
 						<apply color="$tertiaryRoadColor" color__1="$tertiaryRoadColor" cap="ROUND">
 							<switch>
-								<case maxzoom="13">
+								<case maxzoom="13" color_0="$cartographiaRoadDashColor">
 									<apply>
 										<apply_if minzoom="11" maxzoom="11" strokeWidth="1.3:1.3" strokeWidth_3="1.3:1.3"/>
 										<apply_if minzoom="12" maxzoom="12" strokeWidth="1.4:1.4" strokeWidth_3="1.4:1.4"/>
 										<apply_if minzoom="13" maxzoom="13" strokeWidth="1.6:1.6" strokeWidth_3="1.6:1.6"/>
 									</apply>
+									<switch>
+										<case additional="surface=gravel" />
+										<case additional="surface=fine_gravel" />
+										<case additional="surface=compacted" />
+										<case additional="surface=unpaved" />
+										<case additional="surface=pebblestone" />
+										<apply minzoom="10">
+											<case maxzoom="10" strokeWidth_0="1:0.3" pathEffect_0="4_1"/>
+											<case maxzoom="11" strokeWidth_0="1.5:0.3" pathEffect_0="4_1"/>
+											<case maxzoom="12" strokeWidth_0="2:1.5" pathEffect_0="4_1"/>
+											<case maxzoom="13" strokeWidth_0="3:1" pathEffect_0="8_2"/>
+											<case maxzoom="14" strokeWidth_0="4:1" pathEffect_0="12_3"/>
+											<case maxzoom="15" strokeWidth_0="5:1.66" pathEffect_0="15_4"/>
+											<case maxzoom="16" strokeWidth_0="6:2" pathEffect_0="17_5"/>
+											<case maxzoom="17" strokeWidth_0="7.5:2.33" pathEffect_0="20_6"/>
+											<case maxzoom="18" strokeWidth_0="9:2.66" pathEffect_0="25_7"/>
+											<case maxzoom="19" strokeWidth_0="11:3" pathEffect_0="30_8"/>
+											<case maxzoom="20" strokeWidth_0="12:3.33" pathEffect_0="35_9"/>
+											<case minzoom="21" strokeWidth_0="13:3.66" pathEffect_0="40_10"/>
+										</apply>
+										<apply_if cartographiaGravelHighlight="true">
+											<apply minzoom="10">
+												<case maxzoom="10" pathEffect_5="1_1"/>
+												<case maxzoom="11" pathEffect_5="1.5_1.5"/>
+												<case maxzoom="12" pathEffect_5="3_3"/>
+												<case maxzoom="13" pathEffect_5="4_4"/>
+												<case maxzoom="14" pathEffect_5="6_6"/>
+												<case maxzoom="15" pathEffect_5="7_7"/>
+												<case maxzoom="16" pathEffect_5="8_8"/>
+												<case maxzoom="17" pathEffect_5="9_9"/>
+												<case maxzoom="18" pathEffect_5="10_10"/>
+												<case maxzoom="19" pathEffect_5="11_11"/>
+												<case maxzoom="20" pathEffect_5="12_12"/>
+												<case minzoom="21" pathEffect_5="13_13"/>
+											</apply>
+											<apply_if additional="surface=gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply_if additional="surface=unpaved" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply_if additional="surface=pebblestone" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply_if additional="surface=fine_gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply_if additional="surface=compacted" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+											<apply minzoom="10">
+												<case maxzoom="10" strokeWidth_5="1"/>
+												<case maxzoom="11" strokeWidth_5="2"/>
+												<case maxzoom="12" strokeWidth_5="3"/>
+												<case maxzoom="13" strokeWidth_5="4" />
+												<case maxzoom="14" strokeWidth_5="5:5" />
+												<case maxzoom="15" strokeWidth_5="6:6" />
+												<case maxzoom="16" strokeWidth_5="7:7" />
+												<case minzoom="17" strokeWidth_5="10:10" />
+												<case minzoom="18" strokeWidth_5="12:12" />
+											</apply >
+										</apply_if>
+									</switch>
 								</case>
-								<case minzoom="14" color_0="#000000">
+								<case minzoom="14" color_0="$cartographiaRoadDashColor">
 									<case maxzoom="14" strokeWidth="3:3" strokeWidth_3="3:3"/>
 									<case maxzoom="15" strokeWidth="4:4" strokeWidth_3="4:4"/>
 									<case maxzoom="16" strokeWidth="5:5" strokeWidth_3="5:5"/>
@@ -5628,6 +5793,59 @@
 												<case maxzoom="18" strokeWidth_0="11:11"/>
 												<case minzoom="19" strokeWidth_0="12.2:12.2"/>
 											</apply>
+										</switch>
+										<switch>
+											<case additional="surface=gravel" />
+											<case additional="surface=fine_gravel" />
+											<case additional="surface=compacted" />
+											<case additional="surface=unpaved" />
+											<case additional="surface=pebblestone" />
+											<apply minzoom="10">
+												<case maxzoom="10" strokeWidth_0="1:0.3" pathEffect_0="4_1"/>
+												<case maxzoom="11" strokeWidth_0="1.5:0.3" pathEffect_0="4_1"/>
+												<case maxzoom="12" strokeWidth_0="2:1.5" pathEffect_0="4_1"/>
+												<case maxzoom="13" strokeWidth_0="3:1" pathEffect_0="8_2"/>
+												<case maxzoom="14" strokeWidth_0="6:1" pathEffect_0="12_3"/>
+												<case maxzoom="15" strokeWidth_0="7:1.66" pathEffect_0="15_4"/>
+												<case maxzoom="16" strokeWidth_0="8:2" pathEffect_0="17_5"/>
+												<case maxzoom="17" strokeWidth_0="10:2.33" pathEffect_0="20_6"/>
+												<case maxzoom="18" strokeWidth_0="11:2.66" pathEffect_0="25_7"/>
+												<case maxzoom="19" strokeWidth_0="13:3" pathEffect_0="30_8"/>
+												<case maxzoom="20" strokeWidth_0="14:3.33" pathEffect_0="35_9"/>
+												<case minzoom="21" strokeWidth_0="15:3.66" pathEffect_0="40_10"/>
+											</apply>
+											<apply_if cartographiaGravelHighlight="true">
+												<apply minzoom="10">
+													<case maxzoom="10" pathEffect_5="1_1"/>
+													<case maxzoom="11" pathEffect_5="1.5_1.5"/>
+													<case maxzoom="12" pathEffect_5="3_3"/>
+													<case maxzoom="13" pathEffect_5="4_4"/>
+													<case maxzoom="14" pathEffect_5="6_6"/>
+													<case maxzoom="15" pathEffect_5="7_7"/>
+													<case maxzoom="16" pathEffect_5="8_8"/>
+													<case maxzoom="17" pathEffect_5="9_9"/>
+													<case maxzoom="18" pathEffect_5="10_10"/>
+													<case maxzoom="19" pathEffect_5="11_11"/>
+													<case maxzoom="20" pathEffect_5="12_12"/>
+													<case minzoom="21" pathEffect_5="13_13"/>
+												</apply>
+												<apply_if additional="surface=gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+												<apply_if additional="surface=unpaved" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+												<apply_if additional="surface=pebblestone" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+												<apply_if additional="surface=fine_gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+												<apply_if additional="surface=compacted" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+												<apply minzoom="10">
+													<case maxzoom="10" strokeWidth_5="1"/>
+													<case maxzoom="11" strokeWidth_5="2"/>
+													<case maxzoom="12" strokeWidth_5="3"/>
+													<case maxzoom="13" strokeWidth_5="4" />
+													<case maxzoom="14" strokeWidth_5="5:5" />
+													<case maxzoom="15" strokeWidth_5="6:6" />
+													<case maxzoom="16" strokeWidth_5="7:7" />
+													<case minzoom="17" strokeWidth_5="10:10" />
+													<case minzoom="18" strokeWidth_5="12:12" />
+												</apply >
+											</apply_if>
 										</switch>
 									</apply>
 								</case>
@@ -5686,10 +5904,10 @@
 					</switch>
 					<switch minzoom="12">
 						<switch>
-							<!-- <case tag="highway" value="unclassified" color="$unclassifiedRoadColor" color__1="$unclassifiedRoadColor"/> -->
-							<!-- <case tag="highway" value="residential" color="$residentialRoadColor" color__1="$residentialRoadColor"/> -->
+							<case tag="highway" value="unclassified" color="$unclassifiedRoadColor" color__1="$unclassifiedRoadColor"/>
+							<case tag="highway" value="residential" color="$residentialRoadColor" color__1="$residentialRoadColor"/>
 						</switch>
-						<apply cap="ROUND" color_0="#000000">
+						<apply cap="ROUND" color_0="$cartographiaRoadDashColor">
 							<case lessDetailed="false" minzoom="12" maxzoom="12" strokeWidth="0.9" shadowColor="$residentialRoadLowZoom1ShadowColor"/>
 							<case minzoom="13" maxzoom="13" strokeWidth="1:1" strokeWidth_3="1:1" shadowColor="$residentialRoadLowZoom2ShadowColor" />
 							<case minzoom="14" maxzoom="14" strokeWidth="1.5:1.5" strokeWidth_3="1.5:1.5" shadowColor="$residentialRoadLowZoom2ShadowColor"/>
@@ -5718,6 +5936,59 @@
 										<case maxzoom="18" strokeWidth_0="11:11"/>
 										<case minzoom="19" strokeWidth_0="12.1:12.1"/>
 									</apply>
+								</switch>
+								<switch>
+									<case additional="surface=gravel" />
+									<case additional="surface=fine_gravel" />
+									<case additional="surface=compacted" />
+									<case additional="surface=unpaved" />
+									<case additional="surface=pebblestone" />
+									<apply minzoom="10">
+										<case maxzoom="10" strokeWidth_0="1:0.3" pathEffect_0="4_1"/>
+										<case maxzoom="11" strokeWidth_0="1.5:0.3" pathEffect_0="4_1"/>
+										<case maxzoom="12" strokeWidth_0="2:1.5" pathEffect_0="4_1"/>
+										<case maxzoom="13" strokeWidth_0="3:1" pathEffect_0="8_2"/>
+										<case maxzoom="14" strokeWidth_0="4:1" pathEffect_0="12_3"/>
+										<case maxzoom="15" strokeWidth_0="5:1.66" pathEffect_0="15_4"/>
+										<case maxzoom="16" strokeWidth_0="6:2" pathEffect_0="17_5"/>
+										<case maxzoom="17" strokeWidth_0="7.5:2.33" pathEffect_0="20_6"/>
+										<case maxzoom="18" strokeWidth_0="9:2.66" pathEffect_0="25_7"/>
+										<case maxzoom="19" strokeWidth_0="11:3" pathEffect_0="30_8"/>
+										<case maxzoom="20" strokeWidth_0="12:3.33" pathEffect_0="35_9"/>
+										<case minzoom="21" strokeWidth_0="13:3.66" pathEffect_0="40_10"/>
+									</apply>
+									<apply_if cartographiaGravelHighlight="true">
+										<apply minzoom="10">
+											<case maxzoom="10" pathEffect_5="1_1"/>
+											<case maxzoom="11" pathEffect_5="1.5_1.5"/>
+											<case maxzoom="12" pathEffect_5="3_3"/>
+											<case maxzoom="13" pathEffect_5="4_4"/>
+											<case maxzoom="14" pathEffect_5="6_6"/>
+											<case maxzoom="15" pathEffect_5="7_7"/>
+											<case maxzoom="16" pathEffect_5="8_8"/>
+											<case maxzoom="17" pathEffect_5="9_9"/>
+											<case maxzoom="18" pathEffect_5="10_10"/>
+											<case maxzoom="19" pathEffect_5="11_11"/>
+											<case maxzoom="20" pathEffect_5="12_12"/>
+											<case minzoom="21" pathEffect_5="13_13"/>
+										</apply>
+										<apply_if additional="surface=gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=unpaved" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=pebblestone" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=fine_gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply_if additional="surface=compacted" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+										<apply minzoom="10">
+											<case maxzoom="10" strokeWidth_5="1"/>
+											<case maxzoom="11" strokeWidth_5="2"/>
+											<case maxzoom="12" strokeWidth_5="3"/>
+											<case maxzoom="13" strokeWidth_5="4" />
+											<case maxzoom="14" strokeWidth_5="5:5" />
+											<case maxzoom="15" strokeWidth_5="6:6" />
+											<case maxzoom="16" strokeWidth_5="7:7" />
+											<case minzoom="17" strokeWidth_5="10:10" />
+											<case minzoom="18" strokeWidth_5="12:12" />
+										</apply >
+									</apply_if>
 								</switch>
 							</apply>
 							<!-- Bridges -->
@@ -5750,20 +6021,73 @@
 				</switch>
 				<switch minzoom="12">
 					<switch>
-						<!-- <case tag="highway" value="service" color_0="$serviceRoadShadowColor"/> -->
-						<case tag="highway" value="services" color_0="$serviceRoadShadowColor"/>
+						<case tag="highway" value="service" color="$tertiaryRoadColor" color__1="$tertiaryRoadColor" color_0="$secondaryRoadShadowColor" shadowColor="$secondaryRoadShadowColor"/>
+						<case tag="highway" value="services" color="$tertiaryRoadColor" color__1="$tertiaryRoadColor" color_0="$secondaryRoadShadowColor" shadowColor="$secondaryRoadShadowColor"/>
 						<case tag="highway" value="living_street" color_0="$residentialRoadShadowColor"/>
-						<apply color="$serviceRoadColor" color__1="$serviceRoadColor"/>
+						<!-- <apply color="$serviceRoadColor" color__1="$serviceRoadColor"/> -->
 						<apply shadowRadius="$highwayShadowRadius"/>
 						<apply_if nightMode="true" shadowRadius="$highwayShadowRadiusNight"/>
-						<apply shadowColor="$tertiaryRoadShadowColor"/>
+						<!-- <apply shadowColor="$tertiaryRoadShadowColor"/> -->
 						<apply cap="ROUND">
 							<switch>
 								<case additional="service=driveway"/>
 								<case additional="service=parking_aisle"/>
 								<case additional="service=alley"/>
-								<apply color="$serviceDrivewayRoadColor" shadowColor="#888888"/>
+								<!-- <apply color="$serviceDrivewayRoadColor" shadowColor="$secondaryRoadShadowColor"/> -->
 								<!--<apply_if surfaceIntegrity="true" color="$serviceRoadColor"/>-->
+							</switch>
+							<switch>
+								<case additional="surface=gravel" />
+								<case additional="surface=fine_gravel" />
+								<case additional="surface=compacted" />
+								<case additional="surface=unpaved" />
+								<case additional="surface=pebblestone" />
+								<apply minzoom="10">
+									<case maxzoom="10" strokeWidth="0.2" strokeWidth_0="0.8:0.3" pathEffect_0="4_1"/>
+									<case maxzoom="11" strokeWidth="0.2" strokeWidth_0="0.8:0.3" pathEffect_0="4_1"/>
+									<case maxzoom="12" strokeWidth="1.3" strokeWidth_0="1.3:1.5" pathEffect_0="4_1"/>
+									<case maxzoom="13" strokeWidth="1.5:1.5" strokeWidth_0="3:1" pathEffect_0="8_2"/>
+									<case maxzoom="14" strokeWidth="2:1.33" strokeWidth_0="4:1" pathEffect_0="12_3"/>
+									<case maxzoom="15" strokeWidth="2.5:1.66" strokeWidth_0="5.5:1.66" pathEffect_0="15_4"/>
+									<case maxzoom="16" strokeWidth="3:2" strokeWidth_0="6:2" pathEffect_0="17_5"/>
+									<case maxzoom="17" strokeWidth="3.5:2.33" strokeWidth_0="6.5:2.33" pathEffect_0="20_6"/>
+									<case maxzoom="18" strokeWidth="4:2.66" strokeWidth_0="7:2.66" pathEffect_0="25_7"/>
+									<case maxzoom="19" strokeWidth="5:3" strokeWidth_0="8:3" pathEffect_0="30_8"/>
+									<case maxzoom="20" strokeWidth="9:3.33" strokeWidth_0="12:3.33" pathEffect_0="35_9"/>
+									<case minzoom="21" strokeWidth="13:3.66" strokeWidth_0="16:3.66" pathEffect_0="40_10"/>
+								</apply>
+								<apply_if cartographiaGravelHighlight="true">
+									<apply minzoom="10" color_0="$cartographiaRoadDashColor">
+										<case maxzoom="10" pathEffect_5="1_1"/>
+										<case maxzoom="11" pathEffect_5="1.5_1.5"/>
+										<case maxzoom="12" pathEffect_5="3_3"/>
+										<case maxzoom="13" pathEffect_5="4_4"/>
+										<case maxzoom="14" pathEffect_5="6_6"/>
+										<case maxzoom="15" pathEffect_5="7_7"/>
+										<case maxzoom="16" pathEffect_5="8_8"/>
+										<case maxzoom="17" pathEffect_5="9_9"/>
+										<case maxzoom="18" pathEffect_5="10_10"/>
+										<case maxzoom="19" pathEffect_5="11_11"/>
+										<case maxzoom="20" pathEffect_5="12_12"/>
+										<case minzoom="21" pathEffect_5="13_13"/>
+									</apply>
+									<apply_if additional="surface=gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+									<apply_if additional="surface=unpaved" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+									<apply_if additional="surface=pebblestone" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+									<apply_if additional="surface=fine_gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+									<apply_if additional="surface=compacted" color_5="$gravel_road_square_OLD_CartographiaColor"/>
+									<apply minzoom="10">
+										<case maxzoom="10" strokeWidth_5="1"/>
+										<case maxzoom="11" strokeWidth_5="2"/>
+										<case maxzoom="12" strokeWidth_5="3"/>
+										<case maxzoom="13" strokeWidth_5="4" />
+										<case maxzoom="14" strokeWidth_5="5:5" />
+										<case maxzoom="15" strokeWidth_5="6:6" />
+										<case maxzoom="16" strokeWidth_5="7:7" />
+										<case minzoom="17" strokeWidth_5="10:10" />
+										<case minzoom="18" strokeWidth_5="12:12" />
+									</apply >
+								</apply_if>
 							</switch>
 						</apply>
 					</switch>
@@ -5822,7 +6146,7 @@
 						<switch lessDetailed="false">
 							<case maxzoom="13" strokeWidth="0.7" strokeWidth_3="0.7" shadowRadius=":1"/>
 							<case minzoom="14" maxzoom="14" strokeWidth="1:1" strokeWidth_3="1:1" shadowRadius=":1">
-								<!--							<apply_if tag="highway" value="pedestrian" shadowColor="$pedestrianRoadShadowColor"/>-->
+								<!-- <apply_if tag="highway" value="pedestrian" shadowColor="$pedestrianRoadShadowColor"/> -->
 							</case>
 						</switch>
 						<case minzoom="15" maxzoom="15" strokeWidth="2:2" strokeWidth_3="2:2"/>
@@ -5929,9 +6253,7 @@
 			<apply_if minzoom="17" maxzoom="17" pathEffect_3="2_13"/>
 			<apply_if minzoom="18" maxzoom="18" pathEffect_3="2_17"/>
 			<apply_if minzoom="19" pathEffect_3="2_20"/>
-
 		</switch>
-
 		<switch>
 			<switch>
 				<switch>
@@ -6054,96 +6376,6 @@
 								<apply_if additional="trail_visibility=no" color_5="#888888"/>
 							</apply_if>-->
 						</case>
-						<switch>
-							<case minzoom="10" tag="highway" value="secondary" cap="ROUND" color="$secondaryRoadColor" color__1="$secondaryRoadColor" color_0="$secondaryRoadShadowColor" shadowColor="$secondaryRoadShadowColor"/>
-							<case minzoom="10" tag="highway" value="unclassified" cap="ROUND" color="$unclassifiedRoadColor" color__1="$unclassifiedRoadColor" color_0="$secondaryRoadShadowColor" shadowColor="$secondaryRoadShadowColor"/>
-							<case minzoom="10" tag="highway" value="residential" cap="ROUND" color="$residentialRoadColor" color__1="$residentialRoadColor" color_0="$residentialRoadShadowColor" shadowColor="$residentialRoadShadowColor"/>
-							<case minzoom="10" tag="highway" value="tertiary" cap="ROUND" color="$tertiaryRoadColor" color__1="$tertiaryRoadColor" color_0="$tertiaryRoadShadowColor" shadowColor="$tertiaryRoadShadowColor"/>
-							<case minzoom="10" tag="highway" value="service" cap="ROUND" color="$tertiaryRoadColor" color__1="$tertiaryRoadColor" color_0="$secondaryRoadShadowColor" shadowColor="$secondaryRoadShadowColor"/>
-							<apply>
-								<case lessDetailed="false"/>
-								<apply_if lessDetailed="false"/>
-								<apply_if surfaceIntegrity="false">
-									<!--forme et epaisseur du trait des pistes/chemins (track)-->
-									<switch>
-										<case additional="surface=gravel" />
-										<case additional="surface=fine_gravel" />
-										<case additional="surface=compacted" />
-										<case additional="surface=unpaved" />
-										<case additional="surface=pebblestone" />
-										<apply minzoom="10">
-											<case maxzoom="10" strokeWidth="0.2" strokeWidth_0="0.8:0.3" pathEffect_0="4_1"/>
-											<case maxzoom="11" strokeWidth="0.2" strokeWidth_0="0.8:0.3" pathEffect_0="4_1"/>
-											<case maxzoom="12" strokeWidth="1.3" strokeWidth_0="1.3:1.5" pathEffect_0="4_1"/>
-											<case maxzoom="13" strokeWidth="1.5:1.5" strokeWidth_0="3:1" pathEffect_0="8_2"/>
-											<case maxzoom="14" strokeWidth="2:1.33" strokeWidth_0="4:1" pathEffect_0="12_3"/>
-											<case maxzoom="15" strokeWidth="2.5:1.66" strokeWidth_0="5.5:1.66" pathEffect_0="15_4"/>
-											<case maxzoom="16" strokeWidth="3:2" strokeWidth_0="6:2" pathEffect_0="17_5"/>
-											<case maxzoom="17" strokeWidth="3.5:2.33" strokeWidth_0="6.5:2.33" pathEffect_0="20_6"/>
-											<case maxzoom="18" strokeWidth="4:2.66" strokeWidth_0="7:2.66" pathEffect_0="25_7"/>
-											<case maxzoom="19" strokeWidth="5:3" strokeWidth_0="8:3" pathEffect_0="30_8"/>
-											<case maxzoom="20" strokeWidth="9:3.33" strokeWidth_0="12:3.33" pathEffect_0="35_9"/>
-											<case minzoom="21" strokeWidth="13:3.66" strokeWidth_0="16:3.66" pathEffect_0="40_10"/>
-										</apply>
-										<apply_if cartographiaGravelHighlight="true">
-											<apply minzoom="10">
-												<case maxzoom="10" pathEffect_5="1_1"/>
-												<case maxzoom="11" pathEffect_5="1.5_1.5"/>
-												<case maxzoom="12" pathEffect_5="3_3"/>
-												<case maxzoom="13" pathEffect_5="4_4"/>
-												<case maxzoom="14" pathEffect_5="6_6"/>
-												<case maxzoom="15" pathEffect_5="7_7"/>
-												<case maxzoom="16" pathEffect_5="8_8"/>
-												<case maxzoom="17" pathEffect_5="9_9"/>
-												<case maxzoom="18" pathEffect_5="10_10"/>
-												<case maxzoom="19" pathEffect_5="11_11"/>
-												<case maxzoom="20" pathEffect_5="12_12"/>
-												<case minzoom="21" pathEffect_5="13_13"/>
-											</apply>
-											<apply_if additional="surface=gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
-											<apply_if additional="surface=unpaved" color_5="$gravel_road_square_OLD_CartographiaColor"/>
-											<apply_if additional="surface=pebblestone" color_5="$gravel_road_square_OLD_CartographiaColor"/>
-											<apply_if additional="surface=fine_gravel" color_5="$gravel_road_square_OLD_CartographiaColor"/>
-											<apply_if additional="surface=compacted" color_5="$gravel_road_square_OLD_CartographiaColor"/>
-											<apply minzoom="10" color="cyclingRouteCartographiaColor">
-												<case maxzoom="10" strokeWidth_5="1"/>
-												<case maxzoom="11" strokeWidth_5="2"/>
-												<case maxzoom="12" strokeWidth_5="3"/>
-												<case maxzoom="13" strokeWidth_5="4" />
-												<case maxzoom="14" strokeWidth_5="5:5" />
-												<case maxzoom="15" strokeWidth_5="6:6" />
-												<case maxzoom="16" strokeWidth_5="7:7" />
-												<case minzoom="17" strokeWidth_5="10:10" />
-												<case minzoom="18" strokeWidth_5="12:12" />
-											</apply >
-										</apply_if>
-									</switch>
-									<switch>
-										<case/>
-										<case additional="surface=paved"/>
-										<apply minzoom="11">
-											<case maxzoom="11" strokeWidth="0.2" strokeWidth_0="0.8:0.3" pathEffect_0="4_1"/>
-											<case maxzoom="12" strokeWidth="1.3" strokeWidth_0="1.3:1.5" pathEffect_0="4"/>
-											<case maxzoom="13" strokeWidth="1.5:1.5" strokeWidth_0="3:1" pathEffect_0="8"/>
-											<case maxzoom="14" strokeWidth="2:1.33" strokeWidth_0="4:1" pathEffect_0="12"/>
-											<case maxzoom="15" strokeWidth="2.5:1.66" strokeWidth_0="5.5:1.66" pathEffect_0="15"/>
-											<case maxzoom="16" strokeWidth="3:2" strokeWidth_0="6:2" pathEffect_0="17"/>
-											<case maxzoom="17" strokeWidth="3.5:2.33" strokeWidth_0="6.5:2.33" pathEffect_0="20"/>
-											<case maxzoom="18" strokeWidth="4:2.66" strokeWidth_0="7:2.66" pathEffect_0="25"/>
-											<case maxzoom="19" strokeWidth="5:3" strokeWidth_0="8:3" pathEffect_0="30"/>
-											<case maxzoom="20" strokeWidth="9:3.33" strokeWidth_0="12:3.33" pathEffect_0="35"/>
-											<case minzoom="21" strokeWidth="13:3.66" strokeWidth_0="16:3.66" pathEffect_0="40"/>
-										</apply>
-									</switch>
-								</apply_if>
-								<!--<apply_if surfaceIntegrity="true">
-								<apply_if minzoom="12" pathEffect_5="8_3"/>
-								<apply_if additional="trail_visibility=bad" color_5="#888888"/>
-								<apply_if additional="trail_visibility=horrible" color_5="#888888"/>
-								<apply_if additional="trail_visibility=no" color_5="#888888"/>
-							</apply_if>-->
-							</apply>
-						</switch>
 						<case minzoom="12" tag="highway" value="path" cap_5="ROUND">
 							<case baseAppMode="bicycle" minzoom="14" additional="bicycle=designated" color_5="$cyclewayColor" pathEffect_5="4_2" strokeWidth_5="1:1"/>
 							<case lessDetailed="false" maxzoom="14" color_5="$pathColor" pathEffect_5="$pathPathEffect">
@@ -6404,7 +6636,7 @@
 			<apply color="$cyclewayColor"/>
 		</switch>
 
-		<switch>
+		<!-- <switch>
 			<switch>
 				<switch>
 					<case minzoom="7" tag="railway" value="rail"/>
@@ -6413,7 +6645,7 @@
 					<case minzoom="12" tag="railway" value="subway"/>
 					<case minzoom="12" tag="railway" value="preserved"/>
 					<case minzoom="12" tag="railway" value="narrow_gauge"/>
-					<apply color="$railwayRailColor"/>
+					<apply color="$railwayColor"/>
 				</switch>
 				<case minzoom="16" tag="railway" value="funicular" color="#777777"/>
 				<apply>
@@ -6425,7 +6657,7 @@
 						<case minzoom="14" strokeWidth="2:3"/>
 					</switch>
 				</apply>
-				<apply_if additional="electrified=yes" color__2="$railwayRailColor">
+				<apply_if additional="electrified=yes" color__2="$railwayColor">
 					<apply_if additional="service=spur" color__2="#666666"/>
 					<switch minzoom="12">
 						<case maxzoom="12" strokeWidth__2="2:4" pathEffect__2="1_10"/>
@@ -6455,8 +6687,84 @@
 			<case tag="railway" value="construction" pathEffect="12_10"/>
 			<apply color="#999999" strokeWidth="2:2"/>
 			<apply_if additional="bridge=yes" minzoom="14" color="$null" color__1="$railwayAbandonedBridgeColor1" strokeWidth__1="3.5:3.5" color_0="$railwayAbandonedBridgeColor2" strokeWidth_0="2.5:3"/>
-		</switch>
+		</switch> -->
+		<case minzoom="7" tag="railway" value="rail">
+			<case additional="tunnel=yes">
+				<apply_if minzoom="9" maxzoom="13" strokeWidth="1:1" pathEffect="5_2"/>
+				<apply_if minzoom="14" strokeWidth="1:2" color_2="#eeeeee" strokeWidth_2="1:2" pathEffect_2="4_4"/>
+			</case>
+			<case additional="bridge=yes" minzoom="14" color="#000000" strokeWidth="5" color_2="#eeeeee" strokeWidth_2="4" color_3="#999999" strokeWidth_3="0.8" pathEffect_3="12_8_1_0"/>
+			<case maxzoom="7" strokeWidth="0.6"/>
+			<case maxzoom="8" strokeWidth="0.9"/>
+			<case maxzoom="12" strokeWidth="1:1"/>
+			<case maxzoom="13" strokeWidth="1:2" color_2="#eeeeee" strokeWidth_2="1" pathEffect_2="8_12"/>
+			<case minzoom="14" strokeWidth="1:2" color_2="#eeeeee" strokeWidth_2="1" pathEffect_2="0_11_8_1"/>
+			<apply color="$railwayRailColor"/>
+			<apply_if additional="service=spur" color="#b0b0b0" color_2="#eeeeee">
+				<apply_if nightMode="true" color="#666666" color_2="#999999"/>
+			</apply_if>
+		</case>
 
+		<switch>
+			<switch minzoom="13">
+				<case minzoom="15" tag="railway" value="tram" color="#444444">
+					<apply_if minzoom="15" strokeWidth="1:1" strokeWidth__1="2:2"/>
+					<apply_if nightMode="true" color="#66ffffff" color__1="#37555c"/>
+				</case>
+				<case tag="railway" value="light_rail" minzoom="13" color="#666666" strokeWidth="1:1"/>
+				<apply_if additional="tunnel=yes" pathEffect="5_3">
+					<apply_if maxzoom="14" strokeWidth="0.6"/>
+					<apply_if minzoom="15" strokeWidth="1:1"/>
+				</apply_if>
+			</switch>
+			<switch>
+				<switch minzoom="14">
+					<case tag="railway" value="abandoned"/>
+					<case tag="railway" value="disused"/>
+					<apply color="#888888" strokeWidth="1:1" pathEffect="4_2"/>
+				</switch>
+				<case minzoom="15" tag="railway" value="monorail" color="#777777" strokeWidth="1.5:1.5" pathEffect="2_3"/>
+				<case minzoom="13" tag="railway" value="preserved" color="#999999" strokeWidth="1.5:1.5" color_2="#ffffff" strokeWidth_2="1" pathEffect_2="0_1_8_1"/>
+				<case minzoom="16" tag="railway" value="construction" color="#999999" strokeWidth="1.5:1.5" color_2="#ff6600" strokeWidth_2="1" pathEffect_2="8_12"/>
+				<case minzoom="15" tag="railway" value="funicular" color="#666666" strokeWidth="1:1"/>
+				<apply_if additional="tunnel=yes" color__1="#000000" strokeWidth__1="3.5:3.5" pathEffect__1="8_5" color_0="#ffffff" strokeWidth_0="2.5:3"/>
+			</switch>
+			<case minzoom="13" color="#666666" strokeWidth="1:1" tag="railway" value="narrow_gauge">
+				<apply_if additional="tunnel=yes" strokeWidth="3.5:3.5" pathEffect="5_3" color_2="#cccccc" strokeWidth_2="2.5:3"/>
+			</case>
+			<apply_if additional="bridge=yes" minzoom="14" color__1="#000000" strokeWidth__1="3.5:3.5" color_0="#ffffff" strokeWidth_0="2.5:3"/>
+		</switch>
+		<case minzoom="16" tag="railway" value="miniature" strokeWidth="1.5:1.5" pathEffect="2_3">
+			<apply color="#4c53eb">
+				<apply_if nightMode="true" color="#999ce4"/>
+			</apply>
+			<apply_if additional="tunnel=yes" color__1="#000000" strokeWidth__1="3.5:3.5" pathEffect__1="8_5" color_0="#ffffff" strokeWidth_0="2.5:3"/>
+			<apply_if additional="bridge=yes" minzoom="14" color__1="#000000" strokeWidth__1="3.5:3.5" color_0="#ffffff" strokeWidth_0="2.5:3"/>
+			<apply_if nightMode="true" color_0="#000000" color__1="#ffffff"/>
+		</case>
+
+		<switch>
+			<case tag="public_transport" value="platform"/>
+			<case tag="railway" value="halt"/>
+			<apply_if minzoom="16" color="#888888" strokeWidth="2:2" strokeWidth_2="1:1" color_2="#bababa">
+				<apply_if minzoom="18" strokeWidth="3:3" strokeWidth_2="2:2"/>
+				<apply_if additional="disused=yes" color="#aaaaaa" color_2="#bbbbbb">
+					<apply_if nightMode="true" color="#50888888" color_2="#10bababa"/>
+				</apply_if>
+			</apply_if>
+			<apply_if layer="-1" color="#44888888" color_2="#bababa" pathEffect="20_3" pathEffect_2="20_3">
+				<apply_if additional="disused=yes" color="#30888888">
+					<apply_if nightMode="true" color_2="#10bababa"/>
+				</apply_if>
+			</apply_if>
+			<apply_if baseAppMode="bicycle">
+				<apply_if layer="-1" color="#25888888" color_2="#25bababa" pathEffect="20_3" pathEffect_2="20_3">
+					<apply_if nightMode="true" color="#10888888" color_2="#10bababa"/>
+					<apply_if additional="disused=yes" color="#07888888"/>
+				</apply_if>
+			</apply_if>
+			<apply_if baseAppMode="car" layer="-1" disable="true"/>
+		</switch>
 		<switch minzoom="13">
 			<switch>
 				<case tag="aerialway" value="magic_carpet" color="#999999" strokeWidth="1:1"/>
