@@ -29,6 +29,8 @@
 	<renderingProperty attr="osmcScopeTransparent" name="OSMC Cartographia Hiking Paths Transparent" description="" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="cartographiaGravelHighlight" name="Cartographia Highlight Gravel Roads " description="gravel tracks=orange, gravel roads=purple" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="cartographiaDashUnsealed" name="Cartographia Dash/Emphasize Unsealed Roads" description="" type="boolean" possibleValues="" category="details"/>
+	<renderingProperty attr="cartographiaDirtHighlight" name="Highlight Dirt tracks/ways?" description="" type="boolean" possibleValues="" category="details"/>
+	<renderingProperty attr="cartographiaBikeRepairStation" name="Show Bike Repair Stations?" description="" type="boolean" possibleValues="" category="details"/>
 	<renderingProperty attr="hideUnderground" name="Hide underground objects" description="Hide underground objects" type="boolean" possibleValues="" category="hide"/>
 	<renderingProperty attr="hideAccess" name="Hide access restrictions" description="Hide access type" type="boolean" possibleValues="" category="hide"/>
 	<renderingProperty attr="hideBuildings" name="Hide buildings" description="Hide buildings" type="boolean" possibleValues="" category="hide"/>
@@ -305,6 +307,12 @@
 	</renderingAttribute>
 	<renderingAttribute name="cartographiaRoadDashColor">
 		<case attrColorValue="#1d1715" />
+	</renderingAttribute>
+	<renderingAttribute name="cartographiaDirtHighlightColor">
+		<case attrColorValue="#C7DFC200" />
+	</renderingAttribute>
+		<renderingAttribute name="cartographiaPeakColor">
+		<case attrColorValue="$highwayShieldTextCartographiaColor" />
 	</renderingAttribute>
 	<renderingAttribute name="defaultColor">
 		<!-- next line should should make background transparent for underlays to be visible, but this curretnly does not work as desired -->
@@ -1293,7 +1301,7 @@
 
 	<renderingAttribute name="peakVolcanoTextColor">
 		<case nightMode="true" attrColorValue="#EDDBC9"/>
-		<case attrColorValue="#654321"/>
+		<case attrColorValue="$cartographiaPeakColor"/>
 	</renderingAttribute>
 	<renderingAttribute name="peakVolcanoTextHaloColor">
 		<case nightMode="true" attrColorValue="#aa444444"/>
@@ -4526,12 +4534,15 @@
 				<case tag="tourism" value="motel" icon="topo_motel"/>
 				<apply shield="white_round_shield"/>
 			</switch>
-			<switch hidePOIpre-activated="false" minzoom="12" iconOrder="80">
+			<switch hidePOIpre-activated="false" minzoom="10" iconOrder="80">
 				<case tag="public_transport" value="station" icon="amenity_bus_station"/>
 				<case minzoom="16" tag="landuse" value="cemetery" icon="grave"/>
 				<case minzoom="16" tag="railway" value="station" icon="railway_station"/>
 				<case tag="amenity" value="bank" icon="amenity_bank"/>
 				<case tag="amenity" value="atm" icon="amenity_atm" iconOrder="50"/>
+				<case minzoom="10" cartographiaBikeRepairStation="true" tag="amenity" value="bicycle_repair_station" icon="bicycle_repair_station">
+					<apply_if baseAppMode="bicycle" iconOrder="42"/>
+				</case>
 				<apply shield="gray_round_shield"/>
 			</switch>
 			<switch hidePOIpre-activated="false" minzoom="12" iconOrder="60">
@@ -4619,12 +4630,12 @@
 				<case minzoom="16" tag="tourism" value="camp_pitch" icon="topo_camp_pitch" shield="topo_camp_pitch_shield" iconOrder="86"/>
 				<case minzoom="16" tag="tourism" value="caravan_site" icon="topo_caravan_site" shield="topo_caravan_site_shield"/>
 				<case minzoom="14" tag="tourism" value="chalet" icon="topo_chalet" shield="topo_chalet_shield"/>
-				<case minzoom="11" tag="tourism" value="alpine_hut" icon="topo_alpine_hut" shield="topo_alpine_hut_shield" iconOrder="43" iconVisibleSize="9" intersectionSizeFactor="0.7"/>
-				<case minzoom="11" tag="tourism" value="cabin" icon="topo_cabin" shield="topo_cabin_shield"/>
+				<case minzoom="10" tag="tourism" value="alpine_hut" icon="topo_alpine_hut" shield="topo_alpine_hut_shield" iconOrder="43" iconVisibleSize="9" intersectionSizeFactor="0.7"/>
+				<case minzoom="12" tag="tourism" value="cabin" icon="topo_cabin" shield="topo_cabin_shield"/>
 				<case minzoom="14" tag="tourism" value="lean_to" icon="topo_lean_to" shield="topo_lean_to_shield"/>
-				<case minzoom="11" tag="tourism" value="wilderness_hut" icon="topo_wilderness_hut" shield="topo_wilderness_hut_shield" iconOrder="43" iconVisibleSize="9" intersectionSizeFactor="0.7"/>
+				<case minzoom="10" tag="tourism" value="wilderness_hut" icon="topo_wilderness_hut" shield="topo_wilderness_hut_shield" iconOrder="43" iconVisibleSize="9" intersectionSizeFactor="0.7"/>
 				<!-- iconOrder="9"/>-->
-				<case minzoom="11" tag="amenity" value="shelter" icon="amenity_shelter" shield="blue_square_shelter_yes_night_shield" iconOrder="43" iconVisibleSize="9" intersectionSizeFactor="0.7"/>
+				<case minzoom="10" tag="amenity" value="shelter" icon="amenity_shelter" shield="blue_square_shelter_yes_night_shield" iconOrder="43" iconVisibleSize="9" intersectionSizeFactor="0.7"/>
 				<apply_if minzoom="11" additional="drinking_water=yes" icon_2="topo_drinking_water_yes_map"/>
 				<apply_if minzoom="13" additional="drinking_water=no" icon_2="topo_drinking_water_no_map"/>
 				<apply shield="blue_square_shield" iconOrder="43" iconVisibleSize="9" intersectionSizeFactor="0.7"/>
@@ -6530,6 +6541,35 @@
 										<case maxzoom="20" strokeWidth="10:7" pathEffect="35_9"/>
 										<case minzoom="21" strokeWidth="13:11" pathEffect="40_10"/>
 									</apply>
+									<apply_if cartographiaDirtHighlight="true">
+										<apply minzoom="10">
+											<case maxzoom="10" pathEffect_5="1_1"/>
+											<case maxzoom="11" pathEffect_5="1.5_1.5"/>
+											<case maxzoom="12" pathEffect_5="3_3"/>
+											<case maxzoom="13" pathEffect_5="4_4"/>
+											<case maxzoom="14" pathEffect_5="6_6"/>
+											<case maxzoom="15" pathEffect_5="7_7"/>
+											<case maxzoom="16" pathEffect_5="8_8"/>
+											<case maxzoom="17" pathEffect_5="9_9"/>
+											<case maxzoom="18" pathEffect_5="10_10"/>
+											<case maxzoom="19" pathEffect_5="11_11"/>
+											<case maxzoom="20" pathEffect_5="12_12"/>
+											<case minzoom="21" pathEffect_5="13_13"/>
+										</apply>
+										<apply_if additional="surface=ground" color_5="$cartographiaDirtHighlightColor"/>
+										<apply_if additional="surface=dirt" color_5="$cartographiaDirtHighlightColor"/>
+										<apply minzoom="10">
+											<case maxzoom="10" strokeWidth_5="1.5"/>
+											<case maxzoom="11" strokeWidth_5="2"/>
+											<case maxzoom="12" strokeWidth_5="3"/>
+											<case maxzoom="13" strokeWidth_5="4" />
+											<case maxzoom="14" strokeWidth_5="5:5" />
+											<case maxzoom="15" strokeWidth_5="6:6" />
+											<case maxzoom="16" strokeWidth_5="7:7" />
+											<case minzoom="17" strokeWidth_5="10:10" />
+											<case minzoom="18" strokeWidth_5="12:12" />
+										</apply >
+									</apply_if>
 								</switch>
 								<switch>
 									<case/>
