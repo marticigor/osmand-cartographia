@@ -311,7 +311,7 @@
 	<renderingAttribute name="cartographiaDirtHighlightColor">
 		<case attrColorValue="#C7DFC200" />
 	</renderingAttribute>
-		<renderingAttribute name="cartographiaPeakColor">
+	<renderingAttribute name="cartographiaPeakColor">
 		<case attrColorValue="$highwayShieldTextCartographiaColor" />
 	</renderingAttribute>
 	<renderingAttribute name="defaultColor">
@@ -443,6 +443,11 @@
 	<renderingConstant name="highwayOnewayIconBig" value="arrow_triangle_black_big"/>
 	<renderingConstant name="highwayOnewayReverseIcon" value="arrow_triangle_reverse_black"/>
 	<renderingConstant name="highwayOnewayReverseIconBig" value="arrow_triangle_reverse_black_big"/>
+	<!-- Highway shields -->
+	<renderingConstant name="roadShieldOrder1" value="47"/>
+	<renderingConstant name="roadShieldOrder2" value="48"/>
+	<renderingConstant name="roadShieldDefaultOrder" value="93"/>
+	<renderingConstant name="null" value="#00000000"/>
 
 	<renderingAttribute name="highwaySurfaceIntegrityDefaultColor">
 		<case attrColorValue="#DFE2E5">
@@ -2662,11 +2667,6 @@
 			</switch>
 			<case showRunningRoutes="true" tag="route_running" value="" nameTag="route_running_#SEQ_osmc_stub_name_v2" textShield="osmc_?route_running_#SEQ_osmc_background?_bg" icon="osmc_?route_running_#SEQ_osmc_foreground?"/>
 		</switch>
-		<!-- Highway shields -->
-		<renderingConstant name="roadShieldOrder1" value="47"/>
-		<renderingConstant name="roadShieldOrder2" value="48"/>
-		<renderingConstant name="roadShieldDefaultOrder" value="93"/>
-		<renderingConstant name="null" value="#00000000"/>
 		<switch seq="1:10">
 			<case minzoom="7" tag="highway" value="motorway" nameTag="route_road_#SEQ_ref"/>
 			<case minzoom="12" tag="highway" value="motorway_link" nameTag="route_road_#SEQ_ref"/>
